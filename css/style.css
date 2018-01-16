@@ -1,0 +1,78 @@
+body {
+    padding-top: 0px;    
+    font-family: 'Roboto', sans-serif;
+}
+.navbar{
+    border-radius: 0px;
+    margin-bottom: 0px;
+    background: #6b0327;
+
+
+}
+.spinner {
+    height: 100vh;
+    text-align: center;
+}
+.navbar-inverse{
+    border-color: #6b0327;
+}
+
+.navbar-inverse .navbar-nav>li>a,
+.navbar-inverse .navbar-brand,
+.navbar-inverse .navbar-text {
+    color: #fff;
+}
+.navbar-inverse .navbar-nav>.open>a, 
+.navbar-inverse .navbar-nav>.open>a:focus, 
+.navbar-inverse .navbar-nav>.open>a:hover {
+    color: #fff;
+    background-color: #3c0202;
+}
+.mb-4{
+    margin-bottom: 40px;
+}
+
+/*Esilos de Documento */
+.d-f{
+    display: flex;
+    justify-content: space-between;
+}
+hr{
+    width: 30%;
+    height: 10px;
+
+}
+#row-title{
+
+    color: #8a6d3b;
+    background-color: #fcf8e3;
+    border-color: #faebcc;
+    border-radius: 5px;
+}
+h5 small{
+    color: #989080; 
+}
+
+.documento{
+    width: 100%;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+/*   /-Esilos de Documento */
+.navbar-nav.navbar-right:last-child {
+    margin-right: 5px;
+}
+.grisecito{
+    color: lightgray;
+}
+.center{
+    display: flex;
+    align-items: center;
+}
+#t_listado{
+    font-size: 85%;
+}
+.d-n{
+    display: none;
+}
