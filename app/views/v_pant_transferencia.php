@@ -89,7 +89,95 @@
                         {'sClass': 'small'}
                        
                     ],
+
                 });
+
+                $("#identificador").select2({
+                    placeholder: "Ingresa Identificador",
+                    ajax: {
+                        url: '<?php echo site_url("transferencia/identificador_json"); ?>',
+                        dataType: 'json',
+                        quietMillis: 100,
+                        type: 'POST',
+                        data: function (term, page) {
+                            return {
+                                term: term, //search term
+                                page_limit: 100 // page size                               
+                            };
+                        },
+                        results: function (data, page) {
+                           
+                            return { results: data.results };
+                        }
+                    },
+                    initSelection: function(element, callback) {
+                        var idInicial = $("#identificador").val();
+                        return $.post( '<?php echo site_url("transferencia/identificador_json"); ?>', { id: idInicial }, function( data ) {
+                           
+                            return callback(data.results[0]);
+                           
+                        }, "json");
+                     
+                    }
+                });
+                
+                $("#identificador").on("change", function(){
+                    ot =  $("#orden_trabajo").val() 
+                    id = $("#identificador").val()
+                    cambiar_identificador(ot, id)
+                })
+                
+                function cambiar_identificador(idArchivo, id){
+                
+                
+                    $.post("<?php echo site_url('transferencia/editarIdentificador'); ?>/", 
+                                { identificador : id, ot: idArchivo },
+                                function(data) {
+                                    console.log(data)
+                                    $("#select2-chosen-1").css("background", "#d9e4da")
+                                }
+                    ); 
+                
+                }
+                
+                
+              
+                
+                $('#orden_trabajo').on( 'change', function () {
+                    //alert( $('#orden_trabajo').val())
+                    limpiar_formulario(1)
+                    traer_detalles()
+                    $("#obra").val($("#select2-chosen-1").html());
+                } );
+                
+                
+                
+                $("#orden_trabajo").select2({
+                    placeholder: "Asignar OT",
+                    ajax: {
+                        url: '<?php echo site_url("concentracion/ot_json"); ?>',
+                        dataType: 'json',
+                        quietMillis: 100,
+                        type: 'POST',
+                        data: function (term, page) {
+                            return {
+                                term: term, //search term
+                                page_limit: 100 // page size                               
+                            };
+                        },
+                        results: function (data, page) {
+                            return { results: data.results };
+                        }
+                    },
+                    initSelection: function(element, callback) {
+                        var idInicial = $("#orden_trabajo").val();
+                        return $.post( '<?php echo site_url("concentracion/ot_json"); ?>', { id: idInicial }, function( data ) {
+                            return callback(data.results[0]);
+                        }, "json");
+                     
+                    }
+                });  
+                
             });
                 
            

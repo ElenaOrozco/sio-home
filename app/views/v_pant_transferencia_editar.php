@@ -1,93 +1,5 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed'); 
-/*
-    //var_dump($_POST);
-    $CI =& get_instance();
-     //ps://www.youtube.com/watch?v=izezg_uXxps
-     //crear en helper obj_transferencia 
-     //con las prop de la base de datos--
-     //cargar en controlador el helper
-     $transferencia = new obj_Transferencia();
-     $transferencia->id = $id;
-     $transferencia->folio = "T-0$id-".date('y');
-     $transferencia->fecha_registro = date('Y-m-d');
-     $transferencia->idUsuario_registra =  $this->session->userdata('id');
-     $transferencia->idDireccion =  $this->session->userdata('idDireccion_responsable');
- 
-     
-       
-    if ($_POST){
-        $transferencia->id = $_POST['id'];
-        foreach ($transferencia as $prop => $val) {
-            //ceho $prop;
-            $transferencia->$prop = $_POST[$prop];
-        }
- 
-        //var_dump($transferencia);
-        if ($transferencia->id > 0){
-            //actualizar
-            $CI->db->where('id', $transferencia->id);
-            $CI->db->update('saaTransferencia', $transferencia);
-        } else{
-            //inserta
-            $CI->db->insert('saaTransferencia', $transferencia);
-            $transferencia->id = $CI->db->insert_id();
-        }
-        
-        // Detalles de transferencia
-        
-        $CI->db->query("DELETE FROM saaTransferencia_Detalle WHERE idTransferencia ='{$transferencia->id}' ");
-        $No_carpeta = $_POST['No_Carpeta'];
-        $ot = $_POST['ot'];
-        //$obra = $_POST['obra'];
-        $identificador = $_POST['identificador'];
-        //$anio = $_POST['anio'];
-        $fojas = $_POST['fojas'];
-        
-        if (isset($_REQUEST['adm'])) { $adm=1; }  
-        else { $adm=0; } 
-        
-        if (isset($_REQUEST['leg'])) { $leg=1; }  
-        else { $leg=0; } 
-        
-        if (isset($_REQUEST['con'])) { $con=1; }  
-        else { $con=0; } 
-        
-        $obra = $_POST['obra'];
-        $anio  = $_POST['anio'];
-        $observaciones = $_POST['observaciones'];
-        
-        
-        $todo = array();
-        foreach ($No_carpeta as $v => $carpeta) {
-            $todo[] = array( 
-                'idTransferencia' => $transferencia->id, 
-                'No_carpeta'      => $No_carpeta[$v], 
-                'ot'              => $ot[$v],
-                'obra'            => $obra[$v],
-                'anio'            => $anio[$v],
-                'clasificador'    => 'SIOP' .$identificador[$v],
-                'fojas'           => $fojas[$v],
-                'adm'             => $adm[$v],
-                'leg'             => $leg[$v],
-                'con'             => $con[$v],
-                'observaciones'   => $observaciones[$v]
-                );
-        }
-        //echo '<br><br>TODO <br>';
-        //var_dump($todo);
-        
-        
-        $CI->db->insert_batch('saaTransferencia_Detalle', $todo);
- 
-    } else if ($id>0){
-        $CI->db->where('id', $id);
-        $rs = $CI->db->get('saaTransferencia')->result();
-        
-        if (count($rs) <  0){
-            $transferencia = $rs[0];
-        }
-    }
-*/
+
 
 ?>
 <!DOCTYPE html>
@@ -275,7 +187,7 @@
                                     </div>
                                     <div class="col-xs-6 text-right m-b">
                                         <!--button type="button" class="btn btn-warning" onclick="imprimir_transferencia(<?= $id ?>)"><i class="fa fa-print" aria-hidden="true"></i> Imprimir</button-->
-                                        <a  href="<?php echo site_url("impresion/transferencia"). '/' . $id ?> " class="btn btn-warning" target="_blank" onclick="guardar()" >Imprimir </a>
+                                        <a  href="<?php echo site_url("impresion/transferencia"). '/' . $id ?> " class="btn btn-warning" target="_blank" onclick="guardar()" > <span class="glyphicon glyphicon-print glyphicon "></span> Imprimir </a>
                                     </div>
                                 </div>
                                 
@@ -291,20 +203,7 @@
                                     </div>
                                 </div>
                                 
-                                <div class="row">
-                                    <div class="col col-xs-5">
-                                        <div class="input-group form-group">
-                                            <label for="" class="input-group-addon" >No Cajas:</label>
-                                            <input type="number" id="cajas_total" name="cajas_total" value="<?= $cajas->num_rows() ?>" class="form-control" readonly>
-                                        </div>
-                                       
-                                    </div>
-                                    <div class="col col-xs-1 text-right">
-                                        <button type="submit" class="btn btn-success" onclick="nuevaCaja(<?= $id ?>)"><i class="fa fa-plus" aria-hidden="true"></i></button>
-                                    </div>
-                                   
                                 
-                                </div>
                                 
                                 <form id="form-detalles" action="" method="post">
                                     <div class="m-b text-right">
@@ -315,34 +214,28 @@
 
                                     </div>
                                     <div class="" id="div-cajas">
-                                       
-                                        
-                                    </div>
-                                </form>
-                                
-                                <textarea name="text-caja" id="text-caja" style="display:none">
-                                    <div class="panel panel-primary">
+                                       <div class="panel panel-primary">
                                     
                                         <div class="panel-heading flex">
-                                               <a class="panel-title"  data-toggle="collapse" data-parent="#panel" href="#div-caja-{idCaja}">Caja {numeroCaja} </a>
-                                               <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_Caja(this,{idCaja} )"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                                               <a class="panel-title"  data-toggle="collapse" data-parent="#panel" href="#div-caja-{idCaja}"> Detalles </a>
+                                               
                                         </div>
                                     
                                        
                                         
                                         
-                                            <div id="div-caja-{idCaja}" class="panel-collapse collapse in">
+                                            <div id="div-caja" class="panel-collapse collapse in">
                                                 <div class="panel-body">
                                                     <div class="table-responsive">
                                                         <table class="table table-bordered table-condensed">
                                                             <thead>
                                                                 <tr>
-                                                                    <th class="col-md-1"> Carpeta</th>
+                                                                    
                                                                     <th class="col-md-1"> OT</th>
                                                                     <th class="col-md-1"> Descripción</th>
                                                                     <th class="col-md-4"> Identificador</th>
                                                                     <th class="col-md-1"> Año</th>
-                                                                    <th class="col-md-1"> Fojas</th>
+                                                                    <th class="col-md-1"> Hojas</th>
                                                                     <th class="col-md-1"> 
 
                                                                         <table class="table table-condensed">
@@ -361,7 +254,7 @@
                                                                     <th class="col-md-1"></th>
                                                                 </tr>
                                                             </thead>
-                                                            <tbody id='f_body_{idCaja}'>
+                                                            <tbody id='f_body'>
                                                                 
                                                                
 
@@ -370,35 +263,33 @@
                                                     </div>
 
                                                     <div class="text-right">
-                                                        <button type="button" class="btn btn-success btn-sm" onclick="nuevaFila({idCaja}, {numeroCaja})"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                                                        <button type="button" class="btn btn-success btn-sm" onclick="nuevaFila(<?= $id ?>)"><i class="fa fa-plus" aria-hidden="true"></i></button>
                                                     </div>
                                                 </div>
                                             </div>
                                        
                                     </div>
-                                </textarea>
+                                        
+                                    </div>
+                                </form>
+                                
+                                
+                                    
+                                
                                 <textarea name="text-plantilla" id="text-plantilla" cols="30" rows="10" style="display:none">
                                
                                     <tr>
-                                        <td class="col-md-1"> 
-                                            <input type="hidden" id="No_Detalle" name="No_Detalle[]"   value="{idDetalle}" required /> 
-                                            <input type="hidden" id="No_Caja" name="No_Caja[]"   value="{numeroCaja}" required /> 
-                                            <input type="hidden" id="idCaja" name="idCaja[]"   value="{idCaja}" required /> 
-                                            <input type="number" id="No_Carpeta" name="No_Carpeta[]"   value="{No_carpeta}" required /> 
+                                        
+                                        <td class="col-md-1" id="td-{idDetalle}"> 
+                                            <input type="hidden" id="ot" name="ot[]"  class="form-control" value="{ot}" required /> 
+                                            <input type="hidden" id="idDetalle" name="idDetalle[]"  class="form-control" value="{idDetalle}" required />
                                         </td>
-                                        <td class="col-md-1" id="td-{idDetalle}"> <input type="hidden" id="ot" name="ot[]"  class="form-control" value="{ot}" required /> </td>
                                         <td class="col-md-1"> <input type="text" id="obra" name="obra[]" value="{obra}" required  disabled/> </td>
                                         <td class="col-md-4"> 
                                             
                                                 <input type="hidden" id="identificador" name="identificador[]"  value="{identificador}" required />
                                                 <input type="hidden" id="IDidentificador" name="IDidentificador[]"  class="form-control" value="{identificador}"  required />
                                             
-                                            <!--
-                                            <div class="col-sm-3">
-                                                 <a class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal-agregar-identificador" title="Agregar Identificador" role="button" ><i class="fa fa-plus" aria-hidden="true"></i></a></td>
-                                            </div>
-                                           -->
-                                           
                                             
                                         </td>
                                         <td class="col-md-1"> <input type="text" id="anio" name="anio[]" value="{anio}" required disabled /> </td>
@@ -586,8 +477,9 @@
             }
             
             function guardar(tipo = 0){
+                console.log("Guardando")
                 $.post("<?php echo site_url("transferencia/guardar_detalles"); ?>",$("#form-detalles").serialize(),function(res){
-                            console.log("Resultado" +res)
+                            console.log("Resultado Guardando" +res)
                             if(tipo == 1 ){
                                 if(res ==1){
                                     msj = "Transferencia guardada con exito";
@@ -608,96 +500,74 @@
             }
 
             function inicializar(idTransferencia){
-                $.post( "<?php echo site_url("transferencia/get_cajas"); ?>",{ idTransferencia:idTransferencia }, function( data ) {
+                
+                    
+                $.post( "<?php echo site_url("transferencia/get_detalles"); ?>",
+                    { idTransferencia:idTransferencia }, 
+                    function( data ) {
                     console.log( data ); 
-                    
-                    for (var i=0; i < data.length; i++){
-                        
-                        //Pintar Cajas
+
+                    for (var j=0; j < data.length; j++){
+
+                        //Pintar Filas
                         obj = {};
-                        obj.idCaja = data[i].id;
-                        obj.numeroCaja = caja +1;
-                        console.log(obj) 
-                        agregarCaja(obj)
-                        caja = caja +1
-                        console.log(caja +" Cajas Totales")
-                        //buscar Filas de la Caja
                         
-                    
-                        $.post( "<?php echo site_url("transferencia/get_detalles"); ?>",{ idCaja:data[i].id }, function( data ) {
-                            console.log( data ); 
+                        obj.idDetalle = data[j].id;
+                        
+                        
+                         
+                        if (data[j].ot) {
+                            obj.ot = data[j].ot;
+                        } else {
+                             obj.ot =  "";
+                        }
+                        
+                        if (data[j].Obra) {
+                             obj.obra = data[j].Obra;
+                        } else {
+                             obj.obra =  "";
+                        }
+                        
+                        if (data[j].identificador) {
+                             obj.identificador = data[j].identificador;
+                        } else {
+                             obj.identificador=  "";
+                        }
+                        
+                        if (data[j].idEjercicio) {
+                              obj.anio = data[j].idEjercicio;
+                        } else {
+                              obj.anio =  "";
+                        }
+                        
+                        if (data[j].fojas) {
+                              obj.fojas = data[j].fojas;
+                        } else {
+                              obj.fojas =  "";
+                        }
+                        
+                        obj.adm = data[j].adm;
+                        obj.leg = data[j].leg;
+                        obj.con = data[j].con;
+                        
+                        if (data[j].observaciones) {
+                              obj.observaciones = data[j].observaciones;
+                        } else {
+                              obj.observaciones =  "";
+                        }
+                        
+                        
 
-                            for (var j=0; j < data.length; j++){
-
-                                //Pintar Filas
-                                obj = {};
-                                
-                                obj.idDetalle = data[j].id;
-                                obj.numeroCaja = data[j].No_Caja;
-                                obj.idCaja = data[j].idCaja;
-                                
-                                if (data[j].No_Carpeta) {
-                                     obj.No_carpeta = data[j].No_Carpeta;
-                                } else {
-                                     obj.No_carpeta =  "";
-                                }
-                                
-                                
-                                 
-                                if (data[j].ot) {
-                                    obj.ot = data[j].ot;
-                                } else {
-                                     obj.ot =  "";
-                                }
-                                
-                                if (data[j].Obra) {
-                                     obj.obra = data[j].Obra;
-                                } else {
-                                     obj.obra =  "";
-                                }
-                                
-                                if (data[j].identificador) {
-                                     obj.identificador = data[j].identificador;
-                                } else {
-                                     obj.identificador=  "";
-                                }
-                                
-                                if (data[j].idEjercicio) {
-                                      obj.anio = data[j].idEjercicio;
-                                } else {
-                                      obj.anio =  "";
-                                }
-                                
-                                if (data[j].fojas) {
-                                      obj.fojas = data[j].fojas;
-                                } else {
-                                      obj.fojas =  "";
-                                }
-                                
-                                obj.adm = data[j].adm;
-                                obj.leg = data[j].leg;
-                                obj.con = data[j].con;
-                                
-                                if (data[j].observaciones) {
-                                      obj.observaciones = data[j].observaciones;
-                                } else {
-                                      obj.observaciones =  "";
-                                }
-                                
-                                
-
-                                console.log(obj)
-                                agregarFila(obj, data[j].idCaja);
+                        console.log(obj)
+                        agregarFila(obj);
 
 
-                                //buscar Filas de la Caja
+                        //buscar Filas de la Caja
 
-                            }
-
-                        }, "json");
                     }
 
                 }, "json");
+                   
                 
             }
              
@@ -849,18 +719,15 @@
                 $("#div-cajas").css("display", "block")
             }
  
-            function nuevaFila(idCaja, noCaja){
+            function nuevaFila(idTransferencia){
                 
                 $.post("<?php echo site_url('transferencia/nuevaFila'); ?>/", 
-                    { idCaja: idCaja },
+                    { idTransferencia: idTransferencia },
                     function(data) {
                         //console.log(data)
                         if (data > 0){
                             obj = {};
                             obj.idDetalle = data;
-                            obj.numeroCaja = noCaja;
-                            obj.idCaja = idCaja;
-                            obj.No_carpeta = "";
                             obj.ot ="";
                             obj.obra = "";
                             obj.identificador = "";
@@ -872,7 +739,7 @@
                             obj.observaciones = "";
 
                             console.log(obj)
-                            agregarFila(obj, idCaja);
+                            agregarFila(obj);
 
                             
                         } else {
@@ -886,7 +753,7 @@
             }
             
 
-            function agregarFila(obj, idCaja){
+            function agregarFila(obj){
                 
                 tr = document.createElement('tr');
                 cont = $('#text-plantilla').val();
@@ -905,7 +772,7 @@
                 console.log (cont)       
                 tr.innerHTML = cont;
 
-                document.getElementById('f_body_'+idCaja).appendChild(tr);
+                document.getElementById('f_body').appendChild(tr);
                 idDetalle = obj.idDetalle;
                 
                 

@@ -63,6 +63,9 @@ class transferencia_model extends CI_Model {
         
         for($i=0;$i<count($data);$i++) {
             $id =  $data[$i]['id'];
+            
+            var_dump($data[$i]['id']);
+            var_dump($data[$i]['detalles']);
             $this->db->where('id', $id);
             $this->db->update('saaTransferencia_Detalle', $data[$i]['detalles']); 
             $this->log_save(array('Tabla' => 'saaTransferencia_Detalle', 'Data' => $data[$i]['detalles'], 'id' => $id));
@@ -173,11 +176,11 @@ class transferencia_model extends CI_Model {
         return $this->db->get("saaTransferencia_Caja");   
     }
     
-    public function get_detalles($idCaja){
+    public function get_detalles($idTransferencia){
         $this->db->select("a.Obra, a.idEjercicio, d.*");
         $this->db->from("saaTransferencia_Detalle AS d");
         $this->db->join("saaArchivo AS a", "a.id = d.ot", 'left');
-        $this->db->where("idCaja" ,$idCaja);
+        $this->db->where("idTransferencia" ,$idTransferencia);
       
         return $this->db->get();
     }

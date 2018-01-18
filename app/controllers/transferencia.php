@@ -108,12 +108,8 @@ class Transferencia extends MY_Controller {
             $idTransferencia = $this->transferencia_nueva();
             $data["id"] = $idTransferencia ;
             
-            //Agregar Caja 
-            $data_caja = array ( "idTransferencia" => $idTransferencia);
-            $idCaja =  $this->transferencia_model->agregar_caja($data_caja);
-            
-            //Agregar Fila
-            $data_fila= array ( "idCaja" => $idCaja, "No_Caja" =>1);
+           
+            $data_fila= array ( "idTransferencia" => $idTransferencia);
             $idDetalle =  $this->transferencia_model->agregar_fila($data_fila);
            
             
@@ -121,29 +117,9 @@ class Transferencia extends MY_Controller {
         
         
         $data["aTransferecia"] = $this->transferencia_model->get_transferencia($idTransferencia)->row_array();
-        
-        
-        $cajas = $this->transferencia_model->get_cajas($idTransferencia);
-        
-        
-        $datos = array();
-              
-        foreach ($cajas->result() as $caja){
-             $datos[] = array (
-                'idCaja' => $caja->id,
-                'detalles' => $this->transferencia_model->get_detalles($caja->id),
-            );
-        }
-        
-        //echo $datos[0]['id'];
-        //echo $datos[0]['detalles']['No_Caja'];
-        
-        
-        //exit();
-                
-        $data["cajas"] = $cajas;
-        $data['usuario'] = $this->session->userdata('nombre'); 
-        $data['urlanterior']= isset($_SERVER["HTTP_REFERER"]) ? $_SERVER["HTTP_REFERER"] : 'transferencia'; 
+        $data['idDetalle']     = $idDetalle;
+        $data['usuario']       = $this->session->userdata('nombre'); 
+        $data['urlanterior']   = isset($_SERVER["HTTP_REFERER"]) ? $_SERVER["HTTP_REFERER"] : 'transferencia'; 
         $data["aWidgets"]["widget_menu"] = $this->load->view('widget_menu.php', $data, TRUE);
         //$this->load->view('v_pant_transferencia_modificar', $data );
         $this->load->view('v_pant_transferencia_editar', $data );
@@ -300,10 +276,7 @@ class Transferencia extends MY_Controller {
 
 
     public function guardar_detalles(){
-        $idDetalle =    $this->input->post("No_Detalle");
-        $no_Caja =      $this->input->post("No_Caja");
-        $idCaja =       $this->input->post("idCaja");
-        $No_Carpeta =   $this->input->post("No_Carpeta");
+        $idDetalle =    $this->input->post("idDetalle");
         $ot =           $this->input->post("ot");
        
         $identificador   = $this->input->post("identificador");
@@ -316,8 +289,8 @@ class Transferencia extends MY_Controller {
        
         
         $data = array();
-        foreach ($No_Carpeta as $v => $carpeta) {
-            
+        foreach ($idIdentificador as $v => $d) {
+            echo $ot[$v] .'.'.$identificador[$v] .'idDetalle'. $idDetalle[$v] .'<br>';
             $ordenTrabajo = $this->traer_ot ($ot[$v]);
             $ident = $this->identificador_text($identificador[$v]);
             
@@ -331,8 +304,7 @@ class Transferencia extends MY_Controller {
             $data[] = array (
                 'id' => $idDetalle[$v],
                 'detalles' => array( 
-                        'No_Caja'         => $no_Caja[$v],
-                        'No_Carpeta'      => $No_Carpeta[$v], 
+                        
                         'ot'              => $ot[$v],
                         'identificador'   => $identificador[$v],
                         'clasificador'    => $clasificador,
@@ -341,6 +313,7 @@ class Transferencia extends MY_Controller {
                         'observaciones'   => $observaciones[$v]
                         ),
             );
+            //var_dump($data);
            
         }
         
@@ -389,8 +362,8 @@ class Transferencia extends MY_Controller {
     }
     
     public function nuevaFila(){
-        $idCaja = $this->input->post("idCaja");
-        $data = array ( "idCaja" => $idCaja);
+        $idTransferencia = $this->input->post("idTransferencia");
+        $data = array ( "idTransferencia" => $idTransferencia);
         $retorno =  $this->transferencia_model->agregar_fila($data);
            
         echo $retorno;
@@ -410,8 +383,8 @@ class Transferencia extends MY_Controller {
     }
     
     public function get_detalles(){
-        $idCaja = $this->input->post('idCaja');
-        $detalles =  $this->transferencia_model->get_detalles($idCaja)->result_array();
+        $idTransferencia = $this->input->post('idTransferencia');
+        $detalles =  $this->transferencia_model->get_detalles($idTransferencia)->result_array();
         
         $datos = $detalles;
         header('Cache-Control: no-cache, must-revalidate');
